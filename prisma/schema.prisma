@@ -1,0 +1,757 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ===================== KULLANICI & FİRMA =====================
+
+enum TedarikciTipi {
+  yerli
+  yurt_disi_cin
+  yurt_disi_diger
+}
+
+enum TedarikciDurum {
+  onay_bekliyor
+  aktif
+  askida
+  red
+}
+
+model Tedarikci {
+  id                    String         @id @default(cuid())
+  firmaUnvani           String         @unique
+  slug                  String         @unique
+  tedarikciTipi         TedarikciTipi  @default(yerli)
+  vergiNo               String?
+  sanayiSicilNo         String?
+  aciklama              String?
+  kategoriler           String[] // kategori slug listesi
+  konum                 String?
+  bolge                 String?
+  puanOrtalamasi        Float          @default(0)
+  tedarikciSkoru        Int            @default(0)
+  tamamlananIslemSayisi Int            @default(0)
+  goruntulenme          Int            @default(0)
+  dogrulandi            Boolean        @default(false)
+  eudrUyumlu            Boolean        @default(false)
+  oncelikliMi           Boolean        @default(false)
+  logo                  String?
+  sertifikalar          String[]
+  komisyonOrani         Float?
+  abonelikPlani         String?
+  durum                 TedarikciDurum @default(onay_bekliyor)
+
+  // İlişkiler
+  malzemeler             Malzeme[]
+  envanterler            Envanter[]
+  teklifYanitlari        TeklifYanit[]
+  siparisler             Siparis[]
+  degerlendirmeler       Degerlendirme[]
+  supplierScore          SupplierScore?
+  hesapYoneticisiAtamasi HesapYoneticisiAtamasi[]
+
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  tedarikAnlasmasis TedarikAnlasmasi[]
+}
+
+model SupplierScore {
+  id              String    @id @default(cuid())
+  tedarikciId     String    @unique
+  tedarikci       Tedarikci @relation(fields: [tedarikciId], references: [id])
+  otd             Float? // On-Time Delivery %
+  fillRate        Float? // Talep karşılama oranı %
+  responseTime    Int? // RFQ yanıt süresi (saat)
+  repeatRate      Float? // Tekrar sipariş oranı %
+  claimRate       Float? // Şikayet oranı %
+  toplamSkor      Int? // 0-100
+  hesaplamaTarihi DateTime  @default(now())
+}
+
+model TedarikAnlasmasi {
+  id               String    @id @default(cuid())
+  aliciFirmaId     String
+  tedarikciId      String
+  aktifMi          Boolean   @default(true)
+  fiyatModeli      String? // sabit/endeksli/kur-bazli
+  teslimSekli      String? // Incoterms
+  minSiparis       Float?
+  hedefHacimYillik Float?
+  iskontoKurallari Json? // [{hacimEşiği,iskontoOranı}]
+  odemeKosulu      String? // pesin/cari-vade
+  cezaKosullari    String?
+  sozlesmeDosyasi  String?
+  baslangic        DateTime?
+  bitis            DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  tedarikci Tedarikci @relation(fields: [tedarikciId], references: [id])
+}
+
+enum AliciFirmaTipi {
+  fabrika
+  kucuk_isletme
+  atolye
+}
+
+enum DogrulamaDurum {
+  bekliyor
+  dogrulandi
+  red
+}
+
+model AliciFirma {
+  id                String         @id @default(cuid())
+  firmaUnvani       String
+  vergiNo           String?
+  firmaTipi         AliciFirmaTipi @default(kucuk_isletme)
+  teslimatAdresleri String[]
+  cariHesapLimiti   Float?
+  doviz             String         @default("TRY")
+  dogrulamaDurumu   DogrulamaDurum @default(bekliyor)
+
+  kullanicilar       FirmaKullanicisi[]
+  siparisler         Siparis[]
+  teklifler          Teklif[]
+  cariHesaplar       CariHesap[]
+  favoriTedarikciIds String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum FirmaIciRol {
+  satinalma_uzmani
+  satinalma_muduru
+  depo
+  kalite
+  muhasebe
+  genel_mudur
+  salt_okunur
+}
+
+model FirmaKullanicisi {
+  id              String      @id @default(cuid())
+  aliciFirmaId    String
+  aliciFirma      AliciFirma  @relation(fields: [aliciFirmaId], references: [id])
+  ad              String
+  email           String      @unique
+  telefon         String?
+  sifreHash       String
+  rol             FirmaIciRol @default(satinalma_uzmani)
+  onayTutarLimiti Float?
+  durum           Boolean     @default(true)
+
+  createdAt DateTime @default(now())
+}
+
+// ===================== KATEGORİ & MALZEME =====================
+
+model Kategori {
+  id                   String     @id @default(cuid())
+  slug                 String     @unique
+  ad                   String
+  parentId             String?
+  parent               Kategori?  @relation("KategoriTree", fields: [parentId], references: [id])
+  altKategoriler       Kategori[] @relation("KategoriTree")
+  urunSayisi           Int        @default(0)
+  teknikOzellikSablonu String[] // ["kalınlık","ebat","yoğunluk",...]
+  aktif                Boolean    @default(true)
+
+  malzemeler Malzeme[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum StokDurumu {
+  icinde
+  sinirli
+  siparis_uzerine
+  tukendi
+}
+
+enum MalzemeDurum {
+  aktif
+  pasif
+  admin_onayinda
+}
+
+model Malzeme {
+  id               String       @id @default(cuid())
+  baslik           String
+  slug             String
+  tedarikciId      String
+  tedarikci        Tedarikci    @relation(fields: [tedarikciId], references: [id])
+  kategoriId       String
+  kategori         Kategori     @relation(fields: [kategoriId], references: [id])
+  aciklama         String?
+  teknikOzellikler Json? // jsonb: {kalınlık:"18mm",ebat:"2800x2070mm",...}
+  fiyatKademeleri  Json // [{minMiktar,maxMiktar,birimFiyat,paraBirimi}]
+  moq              Float        @default(1)
+  birim            String       @default("adet")
+  stokDurumu       StokDurumu   @default(icinde)
+  teslimSuresi     String?
+  sertifikalar     String[]
+  etiketler        String[]
+  durum            MalzemeDurum @default(aktif)
+  goruntulenme     Int          @default(0)
+
+  envanter         Envanter?
+  teklifler        Teklif[]
+  siparisKalemleri SiparisKalemi[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Envanter {
+  id                    String    @id @default(cuid())
+  malzemeId             String    @unique
+  malzeme               Malzeme   @relation(fields: [malzemeId], references: [id])
+  tedarikciId           String
+  tedarikci             Tedarikci @relation(fields: [tedarikciId], references: [id])
+  stok                  Float     @default(0)
+  rezervliStok          Float     @default(0)
+  uretimde              Float     @default(0)
+  beklenenGiris         Json? // [{miktar,tahminiTarih,kaynak}]
+  guvenlikStogu         Float     @default(0)
+  senkronizasyonKaynagi String? // manual/ERP
+  sonGuncellemeTarihi   DateTime  @default(now())
+
+  createdAt DateTime @default(now())
+}
+
+// ===================== RFQ & SİPARİŞ =====================
+
+enum TeklifDurum {
+  bekliyor
+  yanitlandi
+  kabul_edildi
+  suresi_doldu
+  red
+}
+
+model Teklif {
+  id                     String      @id @default(cuid())
+  aliciFirmaId           String
+  aliciFirma             AliciFirma  @relation(fields: [aliciFirmaId], references: [id])
+  malzemeId              String?
+  malzeme                Malzeme?    @relation(fields: [malzemeId], references: [id])
+  kategoriId             String?
+  istenenMiktar          Float
+  birim                  String
+  istenenTeslimTarihi    DateTime?
+  notlar                 String?
+  gonderilenTedarikciIds String[]
+  durum                  TeklifDurum @default(bekliyor)
+
+  yanitlar TeklifYanit[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TeklifYanit {
+  id               String    @id @default(cuid())
+  teklifId         String
+  teklif           Teklif    @relation(fields: [teklifId], references: [id])
+  tedarikciId      String
+  tedarikci        Tedarikci @relation(fields: [tedarikciId], references: [id])
+  birimFiyat       Float
+  teslimSuresi     String?
+  gecerlilikTarihi DateTime?
+  notlar           String?
+
+  createdAt DateTime @default(now())
+}
+
+enum SiparisDurum {
+  olusturuldu
+  onay_bekliyor
+  onaylandi
+  uretimde
+  sevkiyatta
+  teslim_edildi
+  iptal
+}
+
+model Siparis {
+  id            String       @id @default(cuid())
+  aliciFirmaId  String
+  aliciFirma    AliciFirma   @relation(fields: [aliciFirmaId], references: [id])
+  tedarikciId   String
+  tedarikci     Tedarikci    @relation(fields: [tedarikciId], references: [id])
+  toplamTutar   Float
+  paraBirimi    String       @default("TRY")
+  odemeYontemi  String // pesin/cari-vade/havale
+  durum         SiparisDurum @default(olusturuldu)
+  notlar        String?
+  faturaBilgisi Json? // {eFaturaNo, durum}
+  onayZinciri   Json? // [{kullaniciId,asama,durum,tarih}]
+
+  kalemler       SiparisKalemi[]
+  tesellümKaydi TesellumKaydi?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SiparisKalemi {
+  id          String  @id @default(cuid())
+  siparisId   String
+  siparis     Siparis @relation(fields: [siparisId], references: [id])
+  malzemeId   String
+  malzeme     Malzeme @relation(fields: [malzemeId], references: [id])
+  miktar      Float
+  birimFiyat  Float
+  toplamTutar Float
+}
+
+model TesellumKaydi {
+  id         String   @id @default(cuid())
+  siparisId  String   @unique
+  siparis    Siparis  @relation(fields: [siparisId], references: [id])
+  teslimAlan String?
+  kalemBazli Json? // [{malzemeId,siparisMiktari,teslimAlinan,kaliteDurumu,not}]
+  belgeler   String[]
+  createdAt  DateTime @default(now())
+}
+
+// ===================== CARİ HESAP & FİNANS =====================
+
+model CariHesap {
+  id            String     @id @default(cuid())
+  aliciFirmaId  String
+  aliciFirma    AliciFirma @relation(fields: [aliciFirmaId], references: [id])
+  tedarikciId   String
+  paraBirimi    String     @default("TRY")
+  acikBakiye    Float      @default(0)
+  vadeLimiti    Float?
+  odemeVadeGunu Int?
+  hareketler    Json? // [{tarih,tip(borc/alacak),tutar,aciklama}]
+
+  riskLimiti RiskLimiti?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model RiskLimiti {
+  id                 String    @id @default(cuid())
+  cariHesapId        String    @unique
+  cariHesap          CariHesap @relation(fields: [cariHesapId], references: [id])
+  azamiAcikPozisyon  Float
+  guncelAcikPozisyon Float     @default(0)
+  dso                Float? // Days Sales Outstanding
+}
+
+// ===================== DEĞERLENDİRME & RİSK =====================
+
+model Degerlendirme {
+  id           String    @id @default(cuid())
+  siparisId    String    @unique
+  aliciFirmaId String
+  tedarikciId  String
+  tedarikci    Tedarikci @relation(fields: [tedarikciId], references: [id])
+  puan         Int // 1-5
+  kriterPuani  Json? // {zamanindaTeslim,urunKalitesi,iletisim,fiyatPerformans}
+  yorum        String?
+  createdAt    DateTime  @default(now())
+}
+
+model RiskBayragi {
+  id          String    @id @default(cuid())
+  hedefTip    String // tedarikci/aliciFirma
+  hedefId     String
+  bayrakTipi  String // sikayet-yogunlugu/anormal-giris/dugm/tutarsizlik
+  aciklama    String?
+  cozumDurumu String    @default("acik") // acik/inceleniyor/kapatildi
+  createdAt   DateTime  @default(now())
+  cozumTarihi DateTime?
+}
+
+// ===================== GÜNDEM / İÇERİK =====================
+
+enum GundemKategori {
+  piyasa_fiyat
+  sektorel_haberler
+  trend_tasarim
+  egitim_rehber
+  platform_duyuru
+  roportaj
+  veri_istatistik
+}
+
+model GundemYazisi {
+  id                   String         @id @default(cuid())
+  slug                 String         @unique
+  baslik               String
+  ozet                 String?
+  icerik               String?
+  kategori             GundemKategori
+  altKonuEtiketleri    String[]
+  iliskiliKategoriIds  String[]
+  iliskiliTedarikciIds String[]
+  oneCikar             Boolean        @default(false)
+  yayinTarihi          DateTime?
+  guncellemeTarihi     DateTime?
+  yazar                String?
+  durum                String         @default("taslak") // taslak/yayinda/arsiv
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ===================== ADMIN & DENETİM =====================
+
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  ad        String
+  sifreHash String
+  rol       String   @default("admin") // admin/hesap-yoneticisi
+  createdAt DateTime @default(now())
+}
+
+model DenetimKaydi {
+  id           String   @id @default(cuid())
+  islemTipi    String
+  yapanAdminId String
+  hedefVarlik  String?
+  oncekiDurum  String?
+  yeniDurum    String?
+  not          String?
+  createdAt    DateTime @default(now())
+}
+
+// ===================== HESAP YÖNETİCİSİ =====================
+
+model HesapYoneticisiAtamasi {
+  id                         String     @id @default(cuid())
+  hesapYoneticisiKullaniciId String
+  hedefTip                   String // tedarikci/aliciFirma
+  hedefId                    String
+  tedarikci                  Tedarikci? @relation(fields: [hedefId], references: [id])
+  notlar                     Json? // [{tarih,not}]
+  atamaTarihi                DateTime   @default(now())
+}
+
+// ===================== ERP ENTEGRASYON =====================
+
+model ERPBaglantisi {
+  id                    String    @id @default(cuid())
+  sahipTip              String // aliciFirma/tedarikci
+  sahipId               String
+  sistem                String // Logo/Mikro/Netsis/SAP/Canias
+  baglantiTipi          String // API/dosya-tabanli/webhook
+  senkronizeVeriTipleri String[]
+  syncDurumu            String    @default("aktif")
+  sonSenkronizasyon     DateTime?
+  hataLogu              Json?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
+
+// ===================== CMS V2 — İÇERİK YÖNETİM SİSTEMİ =====================
+
+// --- COMPONENT REGISTRY ---
+model CmsComponent {
+  id              String   @id @default(cuid())
+  key             String   @unique
+  name            String
+  category        String   // layout / content / media / form / navigation / custom
+  schema          Json     // JSON Schema for props
+  editorRenderer  String   // component key for the editor canvas
+  frontendRenderer String  // component key for the frontend
+  defaultProps    Json     @default("{}")
+  version         String   @default("1.0.0")
+  active          Boolean  @default(true)
+  thumbnail       String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// --- PAGES ---
+model CmsPage {
+  id              String     @id @default(cuid())
+  title           String
+  slug            String     @unique
+  description     String?
+  status          String     @default("draft")  // draft / review / approved / published / archived
+  layout          String?    // full-width / boxed
+  seoTitle        String?
+  seoDescription  String?
+  seoIndex        Boolean    @default(true)
+  ogImage         String?
+  schema          Json?      // JSON-LD structured data
+  template        String?    // optional template reference
+  parentId        String?
+  sortOrder       Int        @default(0)
+  publishedAt     DateTime?
+  archivedAt      DateTime?
+  createdBy       String?
+  updatedBy       String?
+
+  sections        CmsSection[]
+  versions        CmsVersion[] @relation("PageVersions")
+  approvals       CmsApproval[]
+  schedules       CmsSchedule[]
+
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+// --- SECTIONS (Page Blocks) ---
+model CmsSection {
+  id              String     @id @default(cuid())
+  pageId          String
+  page            CmsPage    @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  componentKey    String     // references CmsComponent.key
+  props           Json       @default("{}")
+  sortOrder       Int        @default(0)
+  visibility      String     @default("visible") // visible / hidden / logged-in / logged-out
+  customClass     String?
+  anchorId        String?
+
+  versions        CmsVersion[] @relation("SectionVersions")
+
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+// --- MEDIA ---
+model CmsMedia {
+  id              String     @id @default(cuid())
+  filename        String
+  originalName    String
+  mimeType        String
+  size            Int        // bytes
+  url             String
+  thumbUrl        String?
+  width           Int?
+  height          Int?
+  alt             String?
+  caption         String?
+  tags            String[]
+  folder          String?    // folder path
+  usedIn          Json?      // [{entityType, entityId}] — usage tracking
+  createdBy       String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+// --- BLOG ---
+enum PostCategory {
+  piyasa_fiyat
+  sektorel_haberler
+  trend_tasarim
+  egitim_rehber
+  platform_duyuru
+  roportaj
+  veri_istatistik
+}
+
+model CmsPost {
+  id              String       @id @default(cuid())
+  title           String
+  slug            String       @unique
+  excerpt         String?
+  content         Json?        // rich text / block editor content
+  category        PostCategory @default(sektorel_haberler)
+  tags            String[]
+  coverImage      String?
+  author          String?
+  status          String       @default("draft") // draft / review / published / archived
+  seoTitle        String?
+  seoDescription  String?
+  canonical       String?
+  publishedAt     DateTime?
+  scheduledAt     DateTime?
+  createdBy       String?
+
+  versions        CmsVersion[] @relation("PostVersions")
+  approvals       CmsApproval[]
+
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+// --- FORM ---
+model CmsForm {
+  id              String   @id @default(cuid())
+  title           String
+  key             String   @unique
+  fields          Json     // [{type,label,key,required,options,validation,conditions}]
+  settings        Json?    // {submitLabel,successMessage,webhookUrl,redirectUrl}
+  entries         Json?    // [{data,createdAt,ip}] — form submissions
+  active          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// --- NAVIGATION ---
+model CmsNavigation {
+  id              String   @id @default(cuid())
+  location        String   @unique // header / footer / mobile / breadcrumb
+  items           Json     // [{id,label,url,children,sortOrder,target,active}]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// --- GLOBAL SEO ---
+model CmsSeo {
+  id              String   @id @default(cuid())
+  siteTitle       String?
+  siteDescription String?
+  siteUrl         String?
+  robotsTxt       String?
+  googleAnalytics String?
+  facebookPixel   String?
+  ogDefaultImage  String?
+  schema          Json?    // default organization schema
+  updatedAt       DateTime @updatedAt
+}
+
+// --- DESIGN SYSTEM / THEME ---
+model CmsTheme {
+  id              String   @id @default(cuid())
+  name            String   @default("Light")
+  isActive        Boolean  @default(false)
+  tokens          Json     // {colors:{primary,secondary,accent,...},typography:{},spacing:{},radius:{},shadow:{},animation:{}}
+  fonts           Json?    // {heading:{family,weight},body:{family,size}}
+  customCss       String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// --- VERSIONS ---
+model CmsVersion {
+  id              String   @id @default(cuid())
+  entityType      String   // page / section / post
+  entityId        String
+  pageId          String?  @unique
+  page            CmsPage? @relation("PageVersions", fields: [pageId], references: [id])
+  sectionId       String?  @unique
+  section         CmsSection? @relation("SectionVersions", fields: [sectionId], references: [id])
+  postId          String?  @unique
+  post            CmsPost? @relation("PostVersions", fields: [postId], references: [id])
+  snapshot        Json     // full data snapshot at version point
+  version         Int      @default(1)
+  createdBy       String?
+  createdAt       DateTime @default(now())
+}
+
+// --- WORKFLOW / APPROVAL ---
+model CmsApproval {
+  id              String   @id @default(cuid())
+  entityType      String   // page / post
+  entityId        String
+  pageId          String?
+  page            CmsPage?  @relation(fields: [pageId], references: [id])
+  postId          String?
+  post            CmsPost?  @relation(fields: [postId], references: [id])
+  status          String   @default("pending") // pending / approved / rejected
+  requestedBy     String?
+  approvedBy      String?
+  comment         String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// --- SCHEDULER ---
+model CmsSchedule {
+  id              String    @id @default(cuid())
+  entityType      String    // page / post
+  entityId        String
+  pageId          String?
+  page            CmsPage?  @relation(fields: [pageId], references: [id])
+  action          String    // publish / unpublish / archive
+  executeAt       DateTime
+  executedAt      DateTime?
+  status          String    @default("pending") // pending / completed / failed
+  createdAt       DateTime  @default(now())
+}
+
+// --- AUDIT LOG ---
+model CmsAuditLog {
+  id              String   @id @default(cuid())
+  actor           String   // user email
+  action          String   // create / update / delete / publish / rollback
+  entityType      String   // page / post / media / component / theme / setting
+  entityId        String?
+  before          Json?
+  after           Json?
+  ip              String?
+  session         String?
+  createdAt       DateTime @default(now())
+}
+
+// --- SETTINGS ---
+model CmsSetting {
+  id              String   @id @default(cuid())
+  key             String   @unique
+  value           Json
+  description     String?
+  updatedAt       DateTime @updatedAt
+}
+
+// ===================== ATTRIBUTE DICTIONARY V1 =====================
+
+model AttrGroup {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  name        String
+  description String?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  attributes  Attr[]
+}
+
+model Attr {
+  id            String   @id @default(cuid())
+  key           String   @unique
+  name          String
+  type          String   @default("string")
+  unit          String?
+  required      Boolean  @default(false)
+  filterable    Boolean  @default(false)
+  variant       Boolean  @default(false)
+  searchable    Boolean  @default(false)
+  sortOrder     Int      @default(0)
+  attrGroupId   String
+  attrGroup     AttrGroup @relation(fields: [attrGroupId], references: [id])
+  defaultValue  String?
+  options       Json?
+  validation    Json?
+  categorySpecificCategories Category[] @relation("CategorySpecificAttrs")
+  createdAt     DateTime @default(now())
+}
+
+model Category {
+  id              String     @id @default(cuid())
+  slug            String     @unique
+  name            String
+  description     String?
+  level           Int        @default(0)
+  parentId        String?
+  parent          Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children        Category[] @relation("CategoryTree")
+  attrs           Attr[]     @relation("CategorySpecificAttrs")
+  templateAttrs   Json?
+  productCount    Int        @default(0)
+  sortOrder       Int        @default(0)
+  seoTitle        String?
+  seoDescription  String?
+  seoH1           String?
+  seoFaq          Json?
+  active          Boolean    @default(true)
+  image           String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
