@@ -1,0 +1,37 @@
+bash.exe: warning: could not find /tmp, please create!
+▲ Next.js 16.2.9 (Turbopack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 2.3s
+  Running TypeScript ...
+  Finished TypeScript in 2.7s ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/12) ...
+  Generating static pages using 11 workers (3/12) 
+  Generating static pages using 11 workers (6/12) 
+  Generating static pages using 11 workers (9/12) 
+✓ Generating static pages using 11 workers (12/12) in 353ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /gundem
+├ ƒ /gundem/[slug]
+├ ○ /hakkimizda
+├ ○ /iletisim
+├ ƒ /kategori/[slug]
+├ ○ /kategoriler
+├ ○ /panelim/siparislerim
+├ ○ /panelim/tekliflerim
+├ ƒ /tedarikci/[slug]
+├ ○ /teklif
+├ ○ /teklif-iste
+├ ƒ /teklif-iste/[id]
+├ ○ /urunler
+└ ƒ /urunler/[id]
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
