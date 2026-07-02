@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f6f4;
+  --foreground: #2c2a26;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* B2B Mobilya Tedarik Teması */
+  --color-primary: #1a5e3a;
+  --color-primary-light: #2a7a4e;
+  --color-primary-dark: #0f4228;
+
+  --color-secondary: #5b7b4a;
+  --color-secondary-light: #7a9e68;
+
+  --color-accent: #c8703a;
+  --color-accent-light: #db8a56;
+
+  --color-warm-50: #f7f6f4;
+  --color-warm-100: #efedea;
+  --color-warm-200: #e0ddd7;
+  --color-warm-300: #c8c4bc;
+  --color-warm-400: #a39f96;
+  --color-warm-500: #7d7970;
+  --color-warm-600: #625e56;
+  --color-warm-700: #4e4b45;
+  --color-warm-800: #3d3a35;
+  --color-warm-900: #2c2a26;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* RFQ badge pulse animation */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
