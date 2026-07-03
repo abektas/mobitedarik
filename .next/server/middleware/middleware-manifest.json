@@ -1,0 +1,44 @@
+{
+  "sorted_middleware": [],
+  "middleware": {
+    "/": {
+      "files": [
+        "server/edge/chunks/node_modules_next_dist_esm_build_templates_edge-wrapper_0_kjzx3.js",
+        "server/edge/chunks/[root-of-the-server]__1k3-gvz._.js",
+        "server/edge/chunks/turbopack-node_modules_next_dist_esm_build_templates_edge-wrapper_1l5pwhw.js"
+      ],
+      "name": "middleware",
+      "page": "/",
+      "entrypoint": "server/edge/chunks/turbopack-node_modules_next_dist_esm_build_templates_edge-wrapper_1l5pwhw.js",
+      "matchers": [
+        {
+          "regexp": "/:nextData(_next/data/[^/]{1,})?/admin/:path*{(\\.json|\\.rsc|\\.segments/.+\\.segment\\.rsc)}?",
+          "originalSource": "/admin/:path*"
+        },
+        {
+          "regexp": "/:nextData(_next/data/[^/]{1,})?/panelim/:path*{(\\.json|\\.rsc|\\.segments/.+\\.segment\\.rsc)}?",
+          "originalSource": "/panelim/:path*"
+        },
+        {
+          "regexp": "/:nextData(_next/data/[^/]{1,})?/tedarikci-panel/:path*{(\\.json|\\.rsc|\\.segments/.+\\.segment\\.rsc)}?",
+          "originalSource": "/tedarikci-panel/:path*"
+        },
+        {
+          "regexp": "/:nextData(_next/data/[^/]{1,})?/super-admin/:path*{(\\.json|\\.rsc|\\.segments/.+\\.segment\\.rsc)}?",
+          "originalSource": "/super-admin/:path*"
+        }
+      ],
+      "wasm": [],
+      "assets": [],
+      "env": {
+        "__NEXT_BUILD_ID": "CtuoJbIxUnT4UqfJPS_z9",
+        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "j9baiPkRQgNvhUm5fFdYCEkJpQPlcWSo0PkurnCQAFI=",
+        "__NEXT_PREVIEW_MODE_ID": "500d97352bdc477699690cde6cc40149",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "37848f6add68b79005eeeab29046cf61ac3dbfb4adf5cecc48119176ed468081",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "5d1a000a4e63fd40cadff08ef226a79341b7358a6216fa2e7fd8173c93715c65"
+      }
+    }
+  },
+  "instrumentation": null,
+  "functions": {}
+}
