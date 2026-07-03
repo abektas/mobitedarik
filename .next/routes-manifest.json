@@ -1,0 +1,616 @@
+{
+  "version": 3,
+  "pages404": true,
+  "appType": "app",
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "onMatchHeaders": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/admin/site-yonetimi/sayfalar/[id]",
+      "regex": "^/admin/site\\-yonetimi/sayfalar/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/admin/site\\-yonetimi/sayfalar/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/auth/[...nextauth]",
+      "regex": "^/api/auth/(.+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPnextauth": "nxtPnextauth"
+      },
+      "namedRegex": "^/api/auth/(?<nxtPnextauth>.+?)(?:/)?$"
+    },
+    {
+      "page": "/api/cms/pages/[id]",
+      "regex": "^/api/cms/pages/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/cms/pages/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/gundem/[slug]",
+      "regex": "^/gundem/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/gundem/(?<nxtPslug>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/kategori/[slug]",
+      "regex": "^/kategori/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/kategori/(?<nxtPslug>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/super-admin/pages/[id]",
+      "regex": "^/super\\-admin/pages/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/super\\-admin/pages/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/tedarikci/[slug]",
+      "regex": "^/tedarikci/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/tedarikci/(?<nxtPslug>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/teklif-iste/[id]",
+      "regex": "^/teklif\\-iste/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/teklif\\-iste/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/urunler/[id]",
+      "regex": "^/urunler/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/urunler/(?<nxtPid>[^/]+?)(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_global-error",
+      "regex": "^/_global\\-error(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_global\\-error(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/admin",
+      "regex": "^/admin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin(?:/)?$"
+    },
+    {
+      "page": "/admin/ilan-moderasyon",
+      "regex": "^/admin/ilan\\-moderasyon(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/ilan\\-moderasyon(?:/)?$"
+    },
+    {
+      "page": "/admin/kategori-yonetimi",
+      "regex": "^/admin/kategori\\-yonetimi(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/kategori\\-yonetimi(?:/)?$"
+    },
+    {
+      "page": "/admin/raporlama",
+      "regex": "^/admin/raporlama(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/raporlama(?:/)?$"
+    },
+    {
+      "page": "/admin/site-yonetimi",
+      "regex": "^/admin/site\\-yonetimi(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/site\\-yonetimi(?:/)?$"
+    },
+    {
+      "page": "/admin/site-yonetimi/api-anahtarlari",
+      "regex": "^/admin/site\\-yonetimi/api\\-anahtarlari(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/site\\-yonetimi/api\\-anahtarlari(?:/)?$"
+    },
+    {
+      "page": "/admin/site-yonetimi/cron",
+      "regex": "^/admin/site\\-yonetimi/cron(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/site\\-yonetimi/cron(?:/)?$"
+    },
+    {
+      "page": "/admin/site-yonetimi/entegrasyonlar",
+      "regex": "^/admin/site\\-yonetimi/entegrasyonlar(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/site\\-yonetimi/entegrasyonlar(?:/)?$"
+    },
+    {
+      "page": "/admin/site-yonetimi/eposta-ayarlari",
+      "regex": "^/admin/site\\-yonetimi/eposta\\-ayarlari(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/site\\-yonetimi/eposta\\-ayarlari(?:/)?$"
+    },
+    {
+      "page": "/admin/site-yonetimi/guvenlik",
+      "regex": "^/admin/site\\-yonetimi/guvenlik(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/site\\-yonetimi/guvenlik(?:/)?$"
+    },
+    {
+      "page": "/admin/site-yonetimi/hata-log",
+      "regex": "^/admin/site\\-yonetimi/hata\\-log(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/site\\-yonetimi/hata\\-log(?:/)?$"
+    },
+    {
+      "page": "/admin/site-yonetimi/medya",
+      "regex": "^/admin/site\\-yonetimi/medya(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/site\\-yonetimi/medya(?:/)?$"
+    },
+    {
+      "page": "/admin/site-yonetimi/one-bellek",
+      "regex": "^/admin/site\\-yonetimi/one\\-bellek(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/site\\-yonetimi/one\\-bellek(?:/)?$"
+    },
+    {
+      "page": "/admin/site-yonetimi/performans",
+      "regex": "^/admin/site\\-yonetimi/performans(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/site\\-yonetimi/performans(?:/)?$"
+    },
+    {
+      "page": "/admin/site-yonetimi/sayfalar",
+      "regex": "^/admin/site\\-yonetimi/sayfalar(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/site\\-yonetimi/sayfalar(?:/)?$"
+    },
+    {
+      "page": "/admin/site-yonetimi/sistem-ayarlari",
+      "regex": "^/admin/site\\-yonetimi/sistem\\-ayarlari(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/site\\-yonetimi/sistem\\-ayarlari(?:/)?$"
+    },
+    {
+      "page": "/admin/site-yonetimi/veritabani",
+      "regex": "^/admin/site\\-yonetimi/veritabani(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/site\\-yonetimi/veritabani(?:/)?$"
+    },
+    {
+      "page": "/admin/site-yonetimi/yazilar",
+      "regex": "^/admin/site\\-yonetimi/yazilar(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/site\\-yonetimi/yazilar(?:/)?$"
+    },
+    {
+      "page": "/admin/site-yonetimi/yedekleme",
+      "regex": "^/admin/site\\-yonetimi/yedekleme(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/site\\-yonetimi/yedekleme(?:/)?$"
+    },
+    {
+      "page": "/admin/tedarikci-basvurulari",
+      "regex": "^/admin/tedarikci\\-basvurulari(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/tedarikci\\-basvurulari(?:/)?$"
+    },
+    {
+      "page": "/admin/tedarikci-yonetimi",
+      "regex": "^/admin/tedarikci\\-yonetimi(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/tedarikci\\-yonetimi(?:/)?$"
+    },
+    {
+      "page": "/api/cms",
+      "regex": "^/api/cms(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/cms(?:/)?$"
+    },
+    {
+      "page": "/api/cms/audit",
+      "regex": "^/api/cms/audit(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/cms/audit(?:/)?$"
+    },
+    {
+      "page": "/api/cms/components",
+      "regex": "^/api/cms/components(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/cms/components(?:/)?$"
+    },
+    {
+      "page": "/api/cms/forms",
+      "regex": "^/api/cms/forms(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/cms/forms(?:/)?$"
+    },
+    {
+      "page": "/api/cms/media",
+      "regex": "^/api/cms/media(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/cms/media(?:/)?$"
+    },
+    {
+      "page": "/api/cms/navigation",
+      "regex": "^/api/cms/navigation(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/cms/navigation(?:/)?$"
+    },
+    {
+      "page": "/api/cms/pages",
+      "regex": "^/api/cms/pages(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/cms/pages(?:/)?$"
+    },
+    {
+      "page": "/api/cms/posts",
+      "regex": "^/api/cms/posts(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/cms/posts(?:/)?$"
+    },
+    {
+      "page": "/api/cms/schedule",
+      "regex": "^/api/cms/schedule(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/cms/schedule(?:/)?$"
+    },
+    {
+      "page": "/api/cms/sections",
+      "regex": "^/api/cms/sections(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/cms/sections(?:/)?$"
+    },
+    {
+      "page": "/api/cms/seo",
+      "regex": "^/api/cms/seo(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/cms/seo(?:/)?$"
+    },
+    {
+      "page": "/api/cms/settings",
+      "regex": "^/api/cms/settings(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/cms/settings(?:/)?$"
+    },
+    {
+      "page": "/api/cms/themes",
+      "regex": "^/api/cms/themes(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/cms/themes(?:/)?$"
+    },
+    {
+      "page": "/api/cms/versions",
+      "regex": "^/api/cms/versions(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/cms/versions(?:/)?$"
+    },
+    {
+      "page": "/cinden-tedarik",
+      "regex": "^/cinden\\-tedarik(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/cinden\\-tedarik(?:/)?$"
+    },
+    {
+      "page": "/cinden-tedarik/trend-urunler",
+      "regex": "^/cinden\\-tedarik/trend\\-urunler(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/cinden\\-tedarik/trend\\-urunler(?:/)?$"
+    },
+    {
+      "page": "/giris",
+      "regex": "^/giris(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/giris(?:/)?$"
+    },
+    {
+      "page": "/gundem",
+      "regex": "^/gundem(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/gundem(?:/)?$"
+    },
+    {
+      "page": "/guvenli-cikis",
+      "regex": "^/guvenli\\-cikis(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/guvenli\\-cikis(?:/)?$"
+    },
+    {
+      "page": "/hakkimizda",
+      "regex": "^/hakkimizda(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/hakkimizda(?:/)?$"
+    },
+    {
+      "page": "/iletisim",
+      "regex": "^/iletisim(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/iletisim(?:/)?$"
+    },
+    {
+      "page": "/kategoriler",
+      "regex": "^/kategoriler(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/kategoriler(?:/)?$"
+    },
+    {
+      "page": "/kayit",
+      "regex": "^/kayit(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/kayit(?:/)?$"
+    },
+    {
+      "page": "/odeme",
+      "regex": "^/odeme(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/odeme(?:/)?$"
+    },
+    {
+      "page": "/panelim/cari-hesabim",
+      "regex": "^/panelim/cari\\-hesabim(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/panelim/cari\\-hesabim(?:/)?$"
+    },
+    {
+      "page": "/panelim/favori-tedarikciler",
+      "regex": "^/panelim/favori\\-tedarikciler(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/panelim/favori\\-tedarikciler(?:/)?$"
+    },
+    {
+      "page": "/panelim/ithalat-takip",
+      "regex": "^/panelim/ithalat\\-takip(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/panelim/ithalat\\-takip(?:/)?$"
+    },
+    {
+      "page": "/panelim/siparislerim",
+      "regex": "^/panelim/siparislerim(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/panelim/siparislerim(?:/)?$"
+    },
+    {
+      "page": "/panelim/tekliflerim",
+      "regex": "^/panelim/tekliflerim(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/panelim/tekliflerim(?:/)?$"
+    },
+    {
+      "page": "/siparis-sepeti",
+      "regex": "^/siparis\\-sepeti(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/siparis\\-sepeti(?:/)?$"
+    },
+    {
+      "page": "/super-admin",
+      "regex": "^/super\\-admin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/super\\-admin(?:/)?$"
+    },
+    {
+      "page": "/super-admin/audit",
+      "regex": "^/super\\-admin/audit(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/super\\-admin/audit(?:/)?$"
+    },
+    {
+      "page": "/super-admin/blog",
+      "regex": "^/super\\-admin/blog(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/super\\-admin/blog(?:/)?$"
+    },
+    {
+      "page": "/super-admin/components",
+      "regex": "^/super\\-admin/components(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/super\\-admin/components(?:/)?$"
+    },
+    {
+      "page": "/super-admin/design",
+      "regex": "^/super\\-admin/design(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/super\\-admin/design(?:/)?$"
+    },
+    {
+      "page": "/super-admin/forms",
+      "regex": "^/super\\-admin/forms(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/super\\-admin/forms(?:/)?$"
+    },
+    {
+      "page": "/super-admin/media",
+      "regex": "^/super\\-admin/media(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/super\\-admin/media(?:/)?$"
+    },
+    {
+      "page": "/super-admin/navigation",
+      "regex": "^/super\\-admin/navigation(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/super\\-admin/navigation(?:/)?$"
+    },
+    {
+      "page": "/super-admin/pages",
+      "regex": "^/super\\-admin/pages(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/super\\-admin/pages(?:/)?$"
+    },
+    {
+      "page": "/super-admin/scheduler",
+      "regex": "^/super\\-admin/scheduler(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/super\\-admin/scheduler(?:/)?$"
+    },
+    {
+      "page": "/super-admin/seo",
+      "regex": "^/super\\-admin/seo(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/super\\-admin/seo(?:/)?$"
+    },
+    {
+      "page": "/super-admin/settings",
+      "regex": "^/super\\-admin/settings(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/super\\-admin/settings(?:/)?$"
+    },
+    {
+      "page": "/super-admin/versions",
+      "regex": "^/super\\-admin/versions(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/super\\-admin/versions(?:/)?$"
+    },
+    {
+      "page": "/super-admin/workflow",
+      "regex": "^/super\\-admin/workflow(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/super\\-admin/workflow(?:/)?$"
+    },
+    {
+      "page": "/tedarikci-ol",
+      "regex": "^/tedarikci\\-ol(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tedarikci\\-ol(?:/)?$"
+    },
+    {
+      "page": "/tedarikci-panel",
+      "regex": "^/tedarikci\\-panel(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tedarikci\\-panel(?:/)?$"
+    },
+    {
+      "page": "/tedarikci-panel/firma-bilgilerim",
+      "regex": "^/tedarikci\\-panel/firma\\-bilgilerim(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tedarikci\\-panel/firma\\-bilgilerim(?:/)?$"
+    },
+    {
+      "page": "/tedarikci-panel/gelen-teklifler",
+      "regex": "^/tedarikci\\-panel/gelen\\-teklifler(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tedarikci\\-panel/gelen\\-teklifler(?:/)?$"
+    },
+    {
+      "page": "/tedarikci-panel/katalog-yonet",
+      "regex": "^/tedarikci\\-panel/katalog\\-yonet(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tedarikci\\-panel/katalog\\-yonet(?:/)?$"
+    },
+    {
+      "page": "/tedarikci-panel/performans",
+      "regex": "^/tedarikci\\-panel/performans(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tedarikci\\-panel/performans(?:/)?$"
+    },
+    {
+      "page": "/tedarikci-panel/siparislerim",
+      "regex": "^/tedarikci\\-panel/siparislerim(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tedarikci\\-panel/siparislerim(?:/)?$"
+    },
+    {
+      "page": "/tedarikci-panel/stok-fiyat",
+      "regex": "^/tedarikci\\-panel/stok\\-fiyat(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tedarikci\\-panel/stok\\-fiyat(?:/)?$"
+    },
+    {
+      "page": "/tedarikci-panel/taslaklar",
+      "regex": "^/tedarikci\\-panel/taslaklar(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tedarikci\\-panel/taslaklar(?:/)?$"
+    },
+    {
+      "page": "/tedarikci-panel/urunlerim",
+      "regex": "^/tedarikci\\-panel/urunlerim(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tedarikci\\-panel/urunlerim(?:/)?$"
+    },
+    {
+      "page": "/tedarikci-panel/urunlerim/hizli-ekle",
+      "regex": "^/tedarikci\\-panel/urunlerim/hizli\\-ekle(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tedarikci\\-panel/urunlerim/hizli\\-ekle(?:/)?$"
+    },
+    {
+      "page": "/tedarikci-panel/urunlerim/yeni-ekle",
+      "regex": "^/tedarikci\\-panel/urunlerim/yeni\\-ekle(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tedarikci\\-panel/urunlerim/yeni\\-ekle(?:/)?$"
+    },
+    {
+      "page": "/teklif",
+      "regex": "^/teklif(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/teklif(?:/)?$"
+    },
+    {
+      "page": "/teklif-iste",
+      "regex": "^/teklif\\-iste(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/teklif\\-iste(?:/)?$"
+    },
+    {
+      "page": "/urunler",
+      "regex": "^/urunler(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/urunler(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments",
+    "clientParamParsing": false,
+    "dynamicRSCPrerender": false
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}
